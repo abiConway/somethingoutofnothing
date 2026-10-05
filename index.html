@@ -1,222 +1,243 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Rodeo - Portfolio</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'rodeo-white': '#ffffff',
-                        'rodeo-grey': '#666666',
-                        'rodeo-dark': '#222222',
-                        'rodeo-chartreuse': '#DFFF00',
-                    },
-                    fontFamily: {
-                        'helvetica': ['Helvetica', 'Arial', 'sans-serif'],
-                        'typewriter': ['Courier New', 'Courier', 'monospace'],
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        :root {
-            --orbit-radius: 260px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Name</title>
+  <style>
+    :root {
+      --bg: #f7f9e6;
+      --text: #1b1f0d;
+      --muted: #5d6444;
+      --line: #d3dba3;
+      --surface: #ffffff;
+      --accent: #7fff00;   /* chartreuse */
+      --tile: #7fff00;
+      --glow: #5fb800;     /* footer hover, darker so it reads on light bg */
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #12150a;
+        --text: #eef3d6;
+        --muted: #a5ac8a;
+        --line: #2d3418;
+        --surface: #1b2010;
+        --accent: #7fff00;
+        --tile: #7fff00;
+        --glow: #7fff00;
+      }
+    }
 
-        body {
-            background-color: #ffffff;
-            color: #666666;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+    * { box-sizing: border-box; }
 
-        /* Dropdown Styles */
-        .dropdown-content {
-            display: none;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
-        }
-        .dropdown:hover .dropdown-content {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
 
-        /* Orbit Layout Styles */
-        .orbit-wrapper {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            z-index: 10;
-        }
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      border-bottom: 3px solid var(--accent);
+    }
+    .site-title { 
+        font-size: 1rem; 
+        font-weight: 600; 
+        text-decoration: none;
+        font-family: "Courier New", Courier, ui-monospace, monospace; 
+    }
 
-        .orbit-item {
-            position: absolute;
-            width: 120px;
-            height: 120px;
-            margin-top: -60px; /* Half of height to center perfectly */
-            margin-left: -60px; /* Half of width to center perfectly */
-            border-radius: 50%;
-            border: 4px solid transparent;
-            transition: border-color 0.3s ease, transform 0.4s ease, box-shadow 0.3s ease;
-            z-index: 20;
-            background-color: #f5f5f5;
-        }
+    .dropdown { position: relative; }
+    .dropdown-toggle {
+      font: inherit; font-size: 0.9rem; color: var(--text);
+      background: transparent; border: 1px solid var(--line);
+      border-radius: 6px; padding: 0.35rem 0.8rem; cursor: pointer;
+    }
+    .dropdown-menu {
+      display: none; position: absolute; right: 0; top: calc(100% + 6px);
+      min-width: 160px; margin: 0; padding: 0.25rem; list-style: none;
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 8px; z-index: 10;
+    }
+    .dropdown.open .dropdown-menu { display: block; }
+    .dropdown-menu a {
+      display: block; padding: 0.45rem 0.75rem; border-radius: 5px;
+      text-decoration: none; font-size: 0.9rem;
+    }
+    .dropdown-menu a:hover { background: var(--accent); color: #1b1f0d; }
 
-        .orbit-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 50%;
-            filter: grayscale(100%);
-            transition: filter 0.3s ease;
-        }
+    /* Main: text centered, tiles scattered around it */
+    main {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28rem;
+      padding: 1.5rem;
+    }
 
-        .orbit-item:hover {
-            border-color: #7fff00;
-            box-shadow: 0 0 25px rgba(127, 255, 0, 0.4);
-            z-index: 30;
-            /* Subtly scale up on hover while maintaining orbit position */
-            transform-origin: center center;
-        }
+    .typewriter {
+      font-family: "Courier New", Courier, ui-monospace, monospace;
+      text-align: left;
+      padding: 1rem 0;
+    }
+    .typewriter h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(0.8rem, 3.6vw, 1.6rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .typewriter p {
+      margin: 0.15rem 0;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--muted);
+      min-height: 1.6em; /* keeps layout steady while typing */
+    }
 
-        .orbit-item:hover img {
-            filter: grayscale(0%);
-        }
+    /* Tiles. Each one sets its own position and size inline:
+       --x / --y = center point as % of the main area
+       --s = size, --r = tilt */
+    .tile {
+      --s: 72px; --x: 50%; --y: 50%; --r: 0deg;
+      --t: translate(-50%, -50%);
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--s);
+      height: var(--s);
+      display: block;
+      background: var(--tile);
+      border-radius: 2px;
+      overflow: hidden;
+      transform: var(--t) rotate(var(--r));
+      transition: transform 0.15s ease;
+    }
+    .tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .tile:hover { transform: var(--t) rotate(var(--r)) scale(1.08); }
 
-        /* Positioning the 8 images in a circle and counter-rotating them so they stay upright */
-        .orbit-item:nth-child(1) { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
-        .orbit-item:nth-child(2) { transform: rotate(45deg) translateX(var(--orbit-radius)) rotate(-45deg); }
-        .orbit-item:nth-child(3) { transform: rotate(90deg) translateX(var(--orbit-radius)) rotate(-90deg); }
-        .orbit-item:nth-child(4) { transform: rotate(135deg) translateX(var(--orbit-radius)) rotate(-135deg); }
-        .orbit-item:nth-child(5) { transform: rotate(180deg) translateX(var(--orbit-radius)) rotate(-180deg); }
-        .orbit-item:nth-child(6) { transform: rotate(225deg) translateX(var(--orbit-radius)) rotate(-225deg); }
-        .orbit-item:nth-child(7) { transform: rotate(270deg) translateX(var(--orbit-radius)) rotate(-270deg); }
-        .orbit-item:nth-child(8) { transform: rotate(315deg) translateX(var(--orbit-radius)) rotate(-315deg); }
+    /* Small screens: text on top, tiles in a 4x2 grid below */
+    @media (max-width: 800px) {
+      main {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+        align-content: center;
+        justify-items: center;
+      }
+      .typewriter { grid-column: 1 / -1; margin-bottom: 1rem; }
+      .tile {
+        --t: translate(0, 0);
+        position: static;
+        width: min(18vw, 80px);
+        height: min(18vw, 80px);
+      }
+    }
 
-        /* Hover scaling fixes to append to existing transform */
-        .orbit-item:nth-child(1):hover { transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg) scale(1.1); }
-        .orbit-item:nth-child(2):hover { transform: rotate(45deg) translateX(var(--orbit-radius)) rotate(-45deg) scale(1.1); }
-        .orbit-item:nth-child(3):hover { transform: rotate(90deg) translateX(var(--orbit-radius)) rotate(-90deg) scale(1.1); }
-        .orbit-item:nth-child(4):hover { transform: rotate(135deg) translateX(var(--orbit-radius)) rotate(-135deg) scale(1.1); }
-        .orbit-item:nth-child(5):hover { transform: rotate(180deg) translateX(var(--orbit-radius)) rotate(-180deg) scale(1.1); }
-        .orbit-item:nth-child(6):hover { transform: rotate(225deg) translateX(var(--orbit-radius)) rotate(-225deg) scale(1.1); }
-        .orbit-item:nth-child(7):hover { transform: rotate(270deg) translateX(var(--orbit-radius)) rotate(-270deg) scale(1.1); }
-        .orbit-item:nth-child(8):hover { transform: rotate(315deg) translateX(var(--orbit-radius)) rotate(-315deg) scale(1.1); }
+    /* Footer */
+    footer {
+      display: flex; flex-wrap: wrap; gap: 1rem 2rem;
+      align-items: center; justify-content: center;
+      padding: 1.25rem 1.5rem; border-top: 1px solid var(--line);
+      font-family: "Courier New", Courier, ui-monospace, monospace;
+      font-size: 0.95rem; color: var(--muted);
+    }
+    footer a { text-decoration: none; transition: color 0.15s ease; }
+    footer a:hover { color: var(--glow); }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            :root {
-                --orbit-radius: 140px;
-            }
-            .orbit-item {
-                width: 70px;
-                height: 70px;
-                margin-top: -35px;
-                margin-left: -35px;
-            }
-        }
-    </style>
+    @media (prefers-reduced-motion: reduce) {
+      .tile { transition: none; }
+    }
+  </style>
 </head>
-<body class="font-helvetica selection:bg-rodeo-chartreuse selection:text-rodeo-dark">
+<body>
 
-    <header class="w-full flex justify-between items-center p-8 absolute top-0 left-0 z-50 pointer-events-none">
-        <!-- Logo -->
-        <div class="font-typewriter text-sm font-bold tracking-widest text-rodeo-dark pointer-events-auto">
-            THE RODEO
-        </div>
-        
-        <!-- Navigation Dropdown -->
-        <div class="dropdown relative inline-block pointer-events-auto">
-            <button class="font-helvetica text-sm font-bold uppercase tracking-wider text-rodeo-dark hover:text-rodeo-chartreuse transition-colors focus:outline-none flex items-center gap-2">
-                Menu
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-            </button>
-            <div class="dropdown-content absolute right-0 mt-4 w-48 bg-white border border-gray-100 shadow-xl rounded-sm overflow-hidden z-50">
-                <a href="#" class="block px-6 py-4 text-sm text-rodeo-grey hover:bg-gray-50 hover:text-rodeo-chartreuse transition-colors">Projects</a>
-                <a href="#" class="block px-6 py-4 text-sm text-rodeo-grey hover:bg-gray-50 hover:text-rodeo-chartreuse transition-colors border-t border-gray-50">About</a>
-                <a href="#" class="block px-6 py-4 text-sm text-rodeo-grey hover:bg-gray-50 hover:text-rodeo-chartreuse transition-colors border-t border-gray-50">Archive</a>
-            </div>
-        </div>
-    </header>
+  <header>
+    <a class="site-title">Welcome to the Rodeo</a>
+    <div class="dropdown" id="menu">
+      <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Menu ▾</button>
+      <ul class="dropdown-menu">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </header>
 
-    <main class="flex-grow flex items-center justify-center relative overflow-hidden h-screen min-h-[600px]">
-        
-        <!-- Central Text -->
-        <div class="text-center relative z-20 pointer-events-none px-4">
-            <h1 class="text-3xl md:text-5xl font-bold text-rodeo-dark leading-tight md:leading-snug mb-1">Creative Direction</h1>
-            <h1 class="text-3xl md:text-5xl font-bold text-rodeo-dark leading-tight md:leading-snug mb-1">Brand Identity</h1>
-            <h1 class="text-3xl md:text-5xl font-bold text-rodeo-dark leading-tight md:leading-snug text-rodeo-grey">Visual Design</h1>
-        </div>
+  <main>
+    <!-- Edit the text here. It types out line by line. -->
+    <div class="typewriter" id="typewriter">
+      <h1 data-type>Name: Xavier Vandemark-Conway</h1>
+      <p data-type>Location: Colorado</p>
+      <p data-type>Project Type: Creative Portfolio</p>
+    </div>
 
-        <!-- Orbit Container -->
-        <div class="orbit-wrapper">
-            <!-- Image Link 1 -->
-            <a href="#" class="orbit-item group" aria-label="View Project 1">
-                <img src="https://placehold.co/200x200/e2e8f0/64748b?text=P1" alt="Project 1">
-            </a>
-            
-            <!-- Image Link 2 -->
-            <a href="#" class="orbit-item group" aria-label="View Project 2">
-                <img src="https://placehold.co/200x200/cbd5e1/475569?text=P2" alt="Project 2">
-            </a>
-            
-            <!-- Image Link 3 -->
-            <a href="#" class="orbit-item group" aria-label="View Project 3">
-                <img src="https://placehold.co/200x200/94a3b8/334155?text=P3" alt="Project 3">
-            </a>
-            
-            <!-- Image Link 4 -->
-            <a href="#" class="orbit-item group" aria-label="View Project 4">
-                <img src="https://placehold.co/200x200/64748b/1e293b?text=P4" alt="Project 4">
-            </a>
-            
-            <!-- Image Link 5 -->
-            <a href="#" class="orbit-item group" aria-label="View Project 5">
-                <img src="https://placehold.co/200x200/475569/0f172a?text=P5" alt="Project 5">
-            </a>
-            
-            <!-- Image Link 6 -->
-            <a href="#" class="orbit-item group" aria-label="View Project 6">
-                <img src="https://placehold.co/200x200/334155/f8fafc?text=P6" alt="Project 6">
-            </a>
-            
-            <!-- Image Link 7 -->
-            <a href="#" class="orbit-item group" aria-label="View Project 7">
-                <img src="https://placehold.co/200x200/1e293b/f1f5f9?text=P7" alt="Project 7">
-            </a>
-            
-            <!-- Image Link 8 -->
-            <a href="#" class="orbit-item group" aria-label="View Project 8">
-                <img src="https://placehold.co/200x200/0f172a/e2e8f0?text=P8" alt="Project 8">
-            </a>
-        </div>
-    </main>
+    <!-- 8 tiles: swap each href and img src. Tweak --x, --y, --s, --r to move them around. -->
+    <a class="tile" style="--x:9%;  --y:16%; --s:84px; --r:-4deg" href="page1.html" title="Page 1"><img src="images/1.jpg" alt="Page 1" onerror="this.remove()"></a>
+    <a class="tile" style="--x:36%; --y:10%; --s:62px; --r:3deg"  href="page2.html" title="Page 2"><img src="images/2.jpg" alt="Page 2" onerror="this.remove()"></a>
+    <a class="tile" style="--x:70%; --y:20%; --s:76px; --r:5deg"  href="page3.html" title="Page 3"><img src="images/3.jpg" alt="Page 3" onerror="this.remove()"></a>
+    <a class="tile" style="--x:92%; --y:38%; --s:58px; --r:-3deg" href="page4.html" title="Page 4"><img src="images/4.jpg" alt="Page 4" onerror="this.remove()"></a>
+    <a class="tile" style="--x:12%; --y:58%; --s:66px; --r:4deg"  href="page5.html" title="Page 5"><img src="images/5.jpg" alt="Page 5" onerror="this.remove()"></a>
+    <a class="tile" style="--x:30%; --y:88%; --s:80px; --r:-5deg" href="page6.html" title="Page 6"><img src="images/6.jpg" alt="Page 6" onerror="this.remove()"></a>
+    <a class="tile" style="--x:62%; --y:84%; --s:60px; --r:2deg"  href="page7.html" title="Page 7"><img src="images/7.jpg" alt="Page 7" onerror="this.remove()"></a>
+    <a class="tile" style="--x:88%; --y:76%; --s:90px; --r:-2deg" href="page8.html" title="Page 8"><img src="images/8.jpg" alt="Page 8" onerror="this.remove()"></a>
+  </main>
 
-    <footer class="w-full flex flex-col md:flex-row justify-between items-center p-8 bg-white absolute bottom-0 left-0 z-50 font-typewriter text-xs text-rodeo-grey uppercase tracking-widest">
-        <div class="mb-4 md:mb-0 hover:text-rodeo-chartreuse transition-colors">
-            <a href="mailto:hello@therodeo.com">hello@therodeo.com</a>
-        </div>
-        
-        <div class="flex space-x-8">
-            <a href="#" class="hover:text-rodeo-chartreuse transition-colors">Instagram</a>
-            <a href="#" class="hover:text-rodeo-chartreuse transition-colors">Twitter</a>
-            <a href="#" class="hover:text-rodeo-chartreuse transition-colors">LinkedIn</a>
-        </div>
-    </footer>
+  <footer>
+    <a href="https://instagram.com/xaviervandemarkconway">@xaviervandemarkconway</a>
+    <a href="tel:+17194249460">(719) 424-9460</a>
+    <a href="mailto:xaviervandemarkconway@gmail.com">xaviervandemarkconway@gmail.com</a>
+  </footer>
 
+  <script>
+    // Dropdown
+    const menu = document.getElementById('menu');
+    const toggle = menu.querySelector('.dropdown-toggle');
+    function setOpen(open) {
+      menu.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open);
+    }
+    toggle.addEventListener('click', () => setOpen(!menu.classList.contains('open')));
+    document.addEventListener('click', e => { if (!menu.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+
+    // Typewriter
+    const lines = [...document.querySelectorAll('#typewriter [data-type]')];
+    const texts = lines.map(l => l.textContent);
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const SPEED = 70;   // ms per character
+    const PAUSE = 350;  // ms between lines
+
+    if (!reduce) {
+      lines.forEach(l => {
+        l.setAttribute('aria-label', l.textContent); // screen readers get full text
+        l.textContent = '';
+      });
+
+      (async function run() {
+        for (let i = 0; i < lines.length; i++) {
+          const node = document.createTextNode('');
+          lines[i].append(node);
+          for (const ch of texts[i]) {
+            node.textContent += ch;
+            await new Promise(r => setTimeout(r, SPEED));
+          }
+          await new Promise(r => setTimeout(r, PAUSE));
+        }
+      })();
+    }
+  </script>
 </body>
 </html>
