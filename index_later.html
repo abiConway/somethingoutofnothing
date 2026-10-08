@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Your Name</title>
+  <style>
+    :root {
+      --bg: #f7f9e6;
+      --text: #1b1f0d;
+      --muted: #5d6444;
+      --line: #d3dba3;
+      --surface: #ffffff;
+      --accent: #7fff00;   /* chartreuse */
+      --tile: #7fff00;
+      --glow: #5fb800;     /* footer hover, darker so it reads on light bg */
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #12150a;
+        --text: #eef3d6;
+        --muted: #a5ac8a;
+        --line: #2d3418;
+        --surface: #1b2010;
+        --accent: #7fff00;
+        --tile: #7fff00;
+        --glow: #7fff00;
+      }
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    :focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1.5rem;
+      border-bottom: 3px solid var(--accent);
+    }
+    .site-title { 
+        font-size: 1rem; 
+        font-weight: 600; 
+        text-decoration: none;
+        font-family: "Courier New", Courier, ui-monospace, monospace; 
+    }
+
+    .dropdown { position: relative; }
+    .dropdown-toggle {
+      font: inherit; font-size: 0.9rem; color: var(--text);
+      background: transparent; border: 1px solid var(--line);
+      border-radius: 6px; padding: 0.35rem 0.8rem; cursor: pointer;
+    }
+    .dropdown-menu {
+      display: none; position: absolute; right: 0; top: calc(100% + 6px);
+      min-width: 160px; margin: 0; padding: 0.25rem; list-style: none;
+      background: var(--surface); border: 1px solid var(--line);
+      border-radius: 8px; z-index: 10;
+    }
+    .dropdown.open .dropdown-menu { display: block; }
+    .dropdown-menu a {
+      display: block; padding: 0.45rem 0.75rem; border-radius: 5px;
+      text-decoration: none; font-size: 0.9rem;
+    }
+    .dropdown-menu a:hover { background: var(--accent); color: #1b1f0d; }
+
+    /* Main: text centered, tiles scattered around it */
+    main {
+      flex: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28rem;
+      padding: 1.5rem;
+    }
+
+    .typewriter {
+      font-family: "Courier New", Courier, ui-monospace, monospace;
+      text-align: left;
+      padding: 1rem 0;
+    }
+    .typewriter h1 {
+      margin: 0 0 0.5rem;
+      font-size: clamp(0.8rem, 3.6vw, 1.6rem);
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+    .typewriter p {
+      margin: 0.15rem 0;
+      font-size: clamp(1rem, 2.5vw, 1.25rem);
+      color: var(--muted);
+      min-height: 1.6em; /* keeps layout steady while typing */
+    }
+
+    /* Tiles. Each one sets its own position and size inline:
+       --x / --y = center point as % of the main area
+       --s = size, --r = tilt */
+    .tile {
+      --s: 72px; --x: 50%; --y: 50%; --r: 0deg;
+      --t: translate(-50%, -50%);
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--s);
+      height: var(--s);
+      display: block;
+      background: var(--tile);
+      border-radius: 2px;
+      overflow: hidden;
+      transform: var(--t) rotate(var(--r));
+      transition: transform 0.15s ease;
+    }
+    .tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .tile:hover { transform: var(--t) rotate(var(--r)) scale(1.08); }
+
+    /* Small screens: text on top, tiles in a 4x2 grid below */
+    @media (max-width: 800px) {
+      main {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.25rem;
+        align-content: center;
+        justify-items: center;
+      }
+      .typewriter { grid-column: 1 / -1; margin-bottom: 1rem; }
+      .tile {
+        --t: translate(0, 0);
+        position: static;
+        width: min(18vw, 80px);
+        height: min(18vw, 80px);
+      }
+    }
+
+    /* Footer */
+    footer {
+      display: flex; flex-wrap: wrap; gap: 1rem 2rem;
+      align-items: center; justify-content: center;
+      padding: 1.25rem 1.5rem; border-top: 1px solid var(--line);
+      font-family: "Courier New", Courier, ui-monospace, monospace;
+      font-size: 0.95rem; color: var(--muted);
+    }
+    footer a { text-decoration: none; transition: color 0.15s ease; }
+    footer a:hover { color: var(--glow); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tile { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a class="site-title">Welcome to the Rodeo</a>
+    <div class="dropdown" id="menu">
+      <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Menu ▾</button>
+      <ul class="dropdown-menu">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Projects</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- Edit the text here. It types out line by line. -->
+    <div class="typewriter" id="typewriter">
+      <h1 data-type>Name: Xavier Vandemark-Conway</h1>
+      <p data-type>Location: "Somewhere" in Colorado</p>
+      <p data-type>Project: Portfolio</p>
+    </div>
+
+    <!-- 8 tiles: swap each href and img src. Tweak --x, --y, --s, --r to move them around. -->
+    <a class="tile" style="--x:9%;  --y:16%; --s:84px; --r:-4deg" href="page1.html" title="Page 1"><img src="images/1.jpg" alt="Page 1" onerror="this.remove()"></a>
+    <a class="tile" style="--x:36%; --y:10%; --s:62px; --r:3deg"  href="page2.html" title="Page 2"><img src="images/2.jpg" alt="Page 2" onerror="this.remove()"></a>
+    <a class="tile" style="--x:70%; --y:20%; --s:76px; --r:5deg"  href="page3.html" title="Page 3"><img src="images/3.jpg" alt="Page 3" onerror="this.remove()"></a>
+    <a class="tile" style="--x:92%; --y:38%; --s:58px; --r:-3deg" href="page4.html" title="Page 4"><img src="images/4.jpg" alt="Page 4" onerror="this.remove()"></a>
+    <a class="tile" style="--x:12%; --y:58%; --s:66px; --r:4deg"  href="page5.html" title="Page 5"><img src="images/5.jpg" alt="Page 5" onerror="this.remove()"></a>
+    <a class="tile" style="--x:30%; --y:88%; --s:80px; --r:-5deg" href="page6.html" title="Page 6"><img src="images/6.jpg" alt="Page 6" onerror="this.remove()"></a>
+    <a class="tile" style="--x:62%; --y:84%; --s:60px; --r:2deg"  href="page7.html" title="Page 7"><img src="images/7.jpg" alt="Page 7" onerror="this.remove()"></a>
+    <a class="tile" style="--x:88%; --y:76%; --s:90px; --r:-2deg" href="page8.html" title="Page 8"><img src="images/8.jpg" alt="Page 8" onerror="this.remove()"></a>
+  </main>
+
+  <footer>
+    <a href="https://instagram.com/xaviervandemarkconway">@xaviervandemarkconway</a>
+    <a href="tel:+17194249460">(719) 424-9460</a>
+    <a href="mailto:xaviervandemarkconway@gmail.com">xaviervandemarkconway@gmail.com</a>
+  </footer>
+
+  <script>
+    // Dropdown
+    const menu = document.getElementById('menu');
+    const toggle = menu.querySelector('.dropdown-toggle');
+    function setOpen(open) {
+      menu.classList.toggle('open', open);
+      toggle.setAttribute('aria-expanded', open);
+    }
+    toggle.addEventListener('click', () => setOpen(!menu.classList.contains('open')));
+    document.addEventListener('click', e => { if (!menu.contains(e.target)) setOpen(false); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+
+    // Typewriter
+    const lines = [...document.querySelectorAll('#typewriter [data-type]')];
+    const texts = lines.map(l => l.textContent);
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const SPEED = 70;   // ms per character
+    const PAUSE = 350;  // ms between lines
+
+    if (!reduce) {
+      lines.forEach(l => {
+        l.setAttribute('aria-label', l.textContent); // screen readers get full text
+        l.textContent = '';
+      });
+
+      (async function run() {
+        for (let i = 0; i < lines.length; i++) {
+          const node = document.createTextNode('');
+          lines[i].append(node);
+          for (const ch of texts[i]) {
+            node.textContent += ch;
+            await new Promise(r => setTimeout(r, SPEED));
+          }
+          await new Promise(r => setTimeout(r, PAUSE));
+        }
+      })();
+    }
+  </script>
+</body>
+</html>

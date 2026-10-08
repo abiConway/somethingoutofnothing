@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — Xavier VanDemark-Conway</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .about { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 3rem; align-items: end; }
+    .about p { margin: 0 0 1.5rem; }
+    .cluster { position: relative; aspect-ratio: 375 / 270; }
+    .cluster .ph { position: absolute; width: 26%; aspect-ratio: 1; left: var(--x); top: var(--y); }
+    @media (max-width: 800px) {
+      .about { grid-template-columns: 1fr; }
+      .cluster { aspect-ratio: auto; display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+      .cluster .ph { position: static; width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="site-title" href="index.html">Welcome to the Rodeo</a>
+    <div class="dropdown" id="menu">
+      <button class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Menu ▾</button>
+      <ul class="dropdown-menu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="mailto:xaviervandemarkconway@gmail.com">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="about">
+      <div>
+        <p>Xavier VanDemark-Conway</p>
+        <p>Design Report:</p>
+        <p>
+          A multidisciplinary designer, with 7 plus years of experience.<br>
+          Exploring the relationship between design and people.<br>
+          Working across branding, illustration, and graphic design.<br>
+          I’ve built brand and visual communication across a range of industries, including architecture, design, fashion, lifestyle, and hospitality. Creating visual identities and experiences that give ideas a voice, brands a point of view, and audiences a reason to care.
+        </p>
+        <p>
+          Design Principles:<br><br>
+          -Cross Disciplinary<br>
+          -Physical First<br>
+          -Handwriting as Personal Code<br>
+          -Structure&gt;Space<br>
+          -Design As Research<br>
+          -“Living Design”
+        </p>
+        <p>
+          Resources:<br>
+          - “Finely Woven Garments” Waffle Knit<br>
+          - MacBook Pro 13”<br>
+          - MD Paper Journal<br>
+          - Steel Canister<br>
+          - Micron Ink Pen .5mm<br>
+          - Micron Ink Pen .3mm<br>
+          - Mechanical Pencil .5mm<br>
+          - Green Painters Tape
+        </p>
+      </div>
+
+      <!-- 8 resource photos. Replace the text with <img src="images/..." alt="..."> and add class "has-media". -->
+      <div class="cluster">
+        <div class="ph" style="--x:0%;  --y:6%">Insert Photos of Resources</div>
+        <div class="ph" style="--x:16%; --y:38%">Insert Photos of Resources</div>
+        <div class="ph" style="--x:39%; --y:22%">Insert Photos of Resources</div>
+        <div class="ph" style="--x:64%; --y:0%">Insert Photos of Resources</div>
+        <div class="ph" style="--x:74%; --y:24%">Insert Photos of Resources</div>
+        <div class="ph" style="--x:0%;  --y:63%">Insert Photos of Resources</div>
+        <div class="ph" style="--x:43%; --y:63%">Insert Photos of Resources</div>
+        <div class="ph" style="--x:74%; --y:63%">Insert Photos of Resources</div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <a href="https://instagram.com/xaviervandemarkconway">@xaviervandemarkconway</a>
+    <a href="tel:+17194249460">(719) 424-9460</a>
+    <a href="mailto:xaviervandemarkconway@gmail.com">xaviervandemarkconway@gmail.com</a>
+  </footer>
+  <script src="menu.js"></script>
+</body>
+</html>
