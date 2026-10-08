@@ -10,18 +10,22 @@
     .wrap { position: relative; min-height: var(--mh, 0); }
     .blurb { margin: 0; overflow-wrap: anywhere; }
     .media .ph { position: absolute; width: var(--w, 16%); aspect-ratio: 1; left: var(--x); top: var(--y); }
+    .ph canvas { width: 100%; height: 100%; display: block; }
+    .pdf-tag { position: absolute; left: 0; bottom: 0; background: var(--cream); color: #111; padding: .15rem .5rem; font-size: .7rem; }
+    button.ph { border: 0; font: inherit; letter-spacing: inherit; cursor: pointer; transition: scale .15s ease; }
+    button.ph:hover { scale: 1.05; }
+    dialog { width: min(60rem, 94vw); height: 88vh; padding: 0; border: 1px solid var(--cream);
+             background: var(--blue); color: var(--cream); }
+    dialog::backdrop { background: rgba(0, 0, 0, .6); }
+    .dlg { display: flex; flex-direction: column; height: 100%; }
+    .dlg-bar { display: flex; gap: 1.5rem; align-items: center; padding: .75rem 1rem; }
+    .dlg-bar span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dlg-bar button { font: inherit; letter-spacing: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    .dlg-bar button:hover { color: var(--chartreuse); }
+    .dlg iframe { flex: 1; width: 100%; border: 0; background: #fff; }
     .ph.zoom { cursor: zoom-in; transition: scale .15s ease; }
     .ph.zoom:hover { scale: 1.05; }
-
-    /* PDF windows */
-    .docs { display: grid; gap: 3rem; margin-top: 3rem; }
-    .doc { margin: 0; }
-    .doc iframe { display: block; width: 100%; height: min(80vh, 56rem); min-height: 24rem; border: 1px solid var(--cream); background: #fff; }
-    .doc figcaption { display: flex; justify-content: space-between; gap: 1rem; padding-top: .5rem; font-size: .8rem; }
-
-    /* Lightbox */
-    #lightbox { width: 100vw; max-width: 100vw; height: 100vh; max-height: 100vh; padding: 0; border: 0; color: var(--cream); background: rgba(4, 51, 255, .97); }
-    #lightbox::backdrop { background: rgba(0, 0, 0, .6); }
+    #lightbox { width: 100vw; max-width: 100vw; height: 100vh; max-height: 100vh; border: 0; background: rgba(4, 51, 255, .97); }
     .lb { height: 100%; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .5rem; padding: 1rem; }
     #lbStage { display: flex; align-items: center; justify-content: center; min-width: 0; }
     #lbStage img, #lbStage video { max-width: 100%; max-height: 82vh; object-fit: contain; }
@@ -29,7 +33,6 @@
     .lb button:hover { color: var(--chartreuse); }
     #lbClose { position: absolute; top: .5rem; right: .75rem; font-size: .85rem; }
     #lbCount { position: absolute; bottom: .75rem; left: 0; right: 0; text-align: center; }
-
     @media (max-width: 700px) {
       .wrap { min-height: 0; }
       .media { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.5rem; }
@@ -56,7 +59,6 @@
       <p class="blurb" id="blurb"></p>
       <div class="media" id="media"></div>
     </div>
-    <div class="docs" id="docs"></div>
   </main>
 
   <footer>
@@ -64,6 +66,17 @@
     <a href="tel:+17194249460">(719) 424-9460</a>
     <a href="mailto:xaviervandemarkconway@gmail.com">xaviervandemarkconway@gmail.com</a>
   </footer>
+
+  <dialog id="pdfDialog">
+    <div class="dlg">
+      <div class="dlg-bar">
+        <span id="pdfName"></span>
+        <a id="pdfDownload" download>Download</a>
+        <button type="button" id="pdfClose">Close ✕</button>
+      </div>
+      <iframe id="pdfFrame" title="PDF viewer"></iframe>
+    </div>
+  </dialog>
 
   <dialog id="lightbox">
     <div class="lb">
@@ -75,69 +88,137 @@
     </div>
   </dialog>
 
-  <script src="projects.js"></script>
   <script>
+    /* Edit your 7 projects here.
+       media: one entry per photo/video. Use a file path ("images/p1-1.jpg" or "video/p1.mp4"),
+       a PDF ("static/brief.pdf", opens in a pop-up viewer), or null for a white placeholder box. Any number of entries works (1, 2, 4, 6...). */
+    const blurb = "Blurb about the project goes here. Describe the process, the people, and the ideas behind it. ";
+    const projects = {
+      1: { title: "Basketball Graphics", blurb: blurb.repeat(14), media: ["static/basketball_graphics/IMG_1783.jpg", "static/basketball_graphics/IMG_1784.jpg", "static/basketball_graphics/IMG_1785.jpg", "static/basketball_graphics/IMG_1786.jpg", "static/basketball_graphics/IMG_1787.jpg", "static/basketball_graphics/IMG_1788.jpg", "static/basketball_graphics/IMG_1789.jpg", "static/basketball_graphics/IMG_1790.jpg", "static/basketball_graphics/IMG_1791.jpg", "static/basketball_graphics/IMG_1792.jpg", "static/basketball_graphics/IMG_1791 2.jpg", "static/basketball_graphics/IMG_1794.jpg", "static/basketball_graphics/IMG_1795.jpg", "static/basketball_graphics/IMG_1796.jpg"] },
+      2: { title: "CEC Project", blurb: blurb.repeat(14), media: ["static\CEC_project\Brand CommunicationCEC.pdf", "static\CEC_project\Drop In Hours_ _A Frame_.pdf"] },
+      3: { title: "Digital Artwork", blurb: blurb.repeat(14), media: ["static/digital_artwork/Cranberry Union.jpg", "static/digital_artwork/Illustration work .pdf", "static/digital_artwork/image.png", "static/digital_artwork/image-2.png", "static/digital_artwork/image-3.png", "static/digital_artwork/image-4.png", "static/digital_artwork/scanned.pdf", "static/digital_artwork/screenshot-1.png", "static/digital_artwork/screenshot-2.png"] },
+      4: { title: "FA", blurb: blurb.repeat(14), media: ["static\FA_project\FA Sign.png", "static\FA_project\Final Project.png"] },
+      5: { title: "Principessa", blurb: blurb.repeat(14), media: ["static\principessa_project\Bag.HEIC", "static\principessa_project\Bag 2.HEIC", "static\principessa_project\Bag 3.HEIC", "static\principessa_project\Bag 4.HEIC", "static\principessa_project\Bag 5.HEIC", "static\principessa_project\Bag 6.HEIC", "static\principessa_project\Bag 7.HEIC", "static\principessa_project\Bag 8.HEIC", "static\principessa_project\Bag 9.HEIC", "static\principessa_project\Bag 10.HEIC","static\principessa_project\Bag doodle 1.pdf", "static\principessa_project\Bag doodle 2.pdf"] },
+      6: { title: "Tenet", blurb: blurb.repeat(14), media: ["static\tenet_project\All colors.mov", "static\tenet_project\Flame.mov", "static\tenet_project\Oil.mov", "static\tenet_project\Tenet 1.jpg", "static\tenet_project\Tenet 1.MOV", "static\tenet_project\Tenet 2.jpg", "static\tenet_project\Tenet 2.MOV", "static\tenet_project\Tenet 3.jpg", "static\tenet_project\Tenet 3.MOV"] },
+      7: { title: "Merrell", blurb: blurb.repeat(14), media: ["static\Merrell Project Video.mp4"] }
+    };
+
     const id = new URLSearchParams(location.search).get('p');
     const p = projects[id] || projects[1];
     document.title = p.title;
     document.getElementById('title').textContent = `“${p.title}”`;
     document.getElementById('blurb').textContent = p.blurb;
 
-    const isPdf = m => !!m && /\.pdf$/i.test(m);
-    const isVideo = m => /\.(mp4|webm|mov)$/i.test(m);
-    const items = p.media.filter(m => !isPdf(m));   // photos / videos / placeholders
-    const docs = p.media.filter(isPdf);             // PDFs
-    const gallery = items.filter(Boolean);          // what the lightbox flips through
-
-    // ---- Overlay layout for photos ----
-    const n = items.length;
-    const cols = n <= 3 ? Math.max(n, 1) : (n === 4 ? 2 : 3);
+    // Overlay positions, spread loosely across the blurb
+    const n = p.media.length;
+    const cols = n <= 3 ? n : (n === 4 ? 2 : 3);
     const rows = Math.ceil(n / cols);
     const xs = { 1: [32], 2: [33, 63], 3: [28, 56, 84] }[cols];
     const span = rows <= 2 ? 58 : 72;
     const ys = rows === 1 ? [38] : Array.from({ length: rows }, (_, r) => 6 + r * (span / (rows - 1)));
-    const jit = [[0,0],[-1,3],[2,-2],[-2,2],[3,-3],[-3,1]];
-    // more than 2 rows: extra height so the photos don't pile up
+    // more than 2 rows of photos: give the section extra height so they don't pile up
     if (rows > 2) document.querySelector('.wrap').style.setProperty('--mh', ((rows - 1) * 14 + 10) + 'rem');
+    const jit = [[0,0],[-1,3],[2,-2],[-2,2],[3,-3],[-3,1]];
 
-    // ---- Lightbox ----
+    // PDF thumbnails: draws page 1 into the box using PDF.js (loaded from cdnjs only when a PDF is on the page)
+    const PDFJS = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+    let pdfjsReady;
+    function loadPdfJs() {
+      pdfjsReady = pdfjsReady || new Promise((resolve, reject) => {
+        const sc = document.createElement('script');
+        sc.src = PDFJS + 'pdf.min.js';
+        sc.onload = () => { pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS + 'pdf.worker.min.js'; resolve(pdfjsLib); };
+        sc.onerror = reject;
+        document.head.append(sc);
+      });
+      return pdfjsReady;
+    }
+    async function pdfThumb(src, box) {
+      try {
+        const lib = await loadPdfJs();
+        const page = await (await lib.getDocument(src).promise).getPage(1);
+        const N = 400, base = page.getViewport({ scale: 1 });
+        const view = page.getViewport({ scale: Math.max(N / base.width, N / base.height) }); // "cover" the square
+        const canvas = document.createElement('canvas');
+        canvas.width = N; canvas.height = N;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, N, N);
+        await page.render({ canvasContext: ctx, viewport: view, transform: [1, 0, 0, 1, (N - view.width) / 2, 0] }).promise;
+        const tag = document.createElement('span');
+        tag.className = 'pdf-tag'; tag.textContent = 'PDF';
+        box.textContent = '';
+        box.classList.add('has-media');
+        box.append(canvas, tag);
+      } catch (err) {
+        console.warn('PDF preview failed, keeping text label:', src, err); // box keeps its text label
+      }
+    }
+
+    // PDF viewer: pop-up on desktop, new tab on phones/tablets (they don't embed PDFs well)
+    const dlg = document.getElementById('pdfDialog'), frame = document.getElementById('pdfFrame');
+    function openPdf(src, label) {
+      if (matchMedia('(pointer: coarse)').matches) { window.open(src, '_blank'); return; }
+      document.getElementById('pdfName').textContent = label;
+      document.getElementById('pdfDownload').href = src;
+      frame.src = src;
+      dlg.showModal();
+    }
+    const closePdf = () => { dlg.close(); frame.src = 'about:blank'; };
+    document.getElementById('pdfClose').addEventListener('click', closePdf);
+    dlg.addEventListener('click', e => { if (e.target === dlg) closePdf(); });
+    dlg.addEventListener('cancel', () => { frame.src = 'about:blank'; });
+
+    // Lightbox: click a photo or video to see it larger (arrow keys / buttons to browse)
+    const gallery = p.media.filter(m => m && !/\.pdf$/i.test(m));
     const lb = document.getElementById('lightbox'), lbStage = document.getElementById('lbStage');
     let cur = 0;
     function showLb(i) {
       cur = (i + gallery.length) % gallery.length;
       const src = gallery[cur];
-      const el = isVideo(src)
-        ? Object.assign(document.createElement('video'), { src, controls: true, autoplay: true, loop: true, playsInline: true })
-        : Object.assign(document.createElement('img'), { src, alt: `${p.title}, image ${cur + 1}` });
+      let el;
+      if (/\.(mp4|webm|mov)$/i.test(src)) {
+        el = Object.assign(document.createElement('video'), { src, controls: true, autoplay: true, loop: true, playsInline: true });
+      } else {
+        el = Object.assign(document.createElement('img'), { src, alt: `${p.title}, image ${cur + 1}` });
+      }
       lbStage.replaceChildren(el);
       document.getElementById('lbCount').textContent = `${cur + 1} / ${gallery.length}`;
     }
     function openLb(i) {
       showLb(i);
-      const vis = gallery.length > 1 ? 'visible' : 'hidden';
-      document.getElementById('lbPrev').style.visibility = vis;
-      document.getElementById('lbNext').style.visibility = vis;
+      const many = gallery.length > 1;
+      document.getElementById('lbPrev').style.visibility = many ? 'visible' : 'hidden';
+      document.getElementById('lbNext').style.visibility = many ? 'visible' : 'hidden';
       lb.showModal();
     }
     document.getElementById('lbPrev').addEventListener('click', () => showLb(cur - 1));
     document.getElementById('lbNext').addEventListener('click', () => showLb(cur + 1));
     document.getElementById('lbClose').addEventListener('click', () => lb.close());
     lb.addEventListener('click', e => { if (!e.target.closest('img, video, button')) lb.close(); });
-    lb.addEventListener('close', () => lbStage.replaceChildren());
+    lb.addEventListener('close', () => lbStage.replaceChildren()); // also stops any playing video
     lb.addEventListener('keydown', e => {
       if (e.key === 'ArrowRight') showLb(cur + 1);
       if (e.key === 'ArrowLeft') showLb(cur - 1);
     });
 
-    // ---- Photo / video tiles ----
-    items.forEach((src, i) => {
-      const box = document.createElement('div');
+    p.media.forEach((src, i) => {
+      const isPdf = !!src && /\.pdf$/i.test(src);
+      const box = document.createElement(isPdf ? 'button' : 'div');
       box.className = 'ph';
       const [jx, jy] = jit[i % jit.length];
-      box.style.setProperty('--x', (n === 1 ? 32 : xs[i % cols] + jx) + '%');
-      box.style.setProperty('--y', (n === 1 ? 12 : ys[Math.floor(i / cols)] + jy) + '%');
+      const x = n === 1 ? 32 : xs[i % cols] + jx;
+      const y = n === 1 ? 12 : ys[Math.floor(i / cols)] + jy;
+      box.style.setProperty('--x', x + '%');
+      box.style.setProperty('--y', y + '%');
       if (n === 1) box.style.setProperty('--w', '36%');
-      if (src) {
+      if (isPdf) {
+        const label = decodeURIComponent(src.split('/').pop().replace(/\.pdf$/i, ''));
+        box.type = 'button';
+        box.textContent = 'PDF: ' + label;
+        box.setAttribute('aria-label', 'Open PDF: ' + label);
+        box.addEventListener('click', () => openPdf(src, label));
+        pdfThumb(src, box);
+      } else if (src) {
         box.classList.add('has-media', 'zoom');
         box.tabIndex = 0;
         box.setAttribute('role', 'button');
@@ -145,30 +226,19 @@
         const idx = gallery.indexOf(src);
         box.addEventListener('click', () => openLb(idx));
         box.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(idx); } });
-        if (isVideo(src)) {
-          box.append(Object.assign(document.createElement('video'), { src, autoplay: true, muted: true, loop: true, playsInline: true }));
+        if (/\.(mp4|webm|mov)$/i.test(src)) {
+          const v = document.createElement('video');
+          Object.assign(v, { src, autoplay: true, muted: true, loop: true, playsInline: true });
+          box.append(v);
         } else {
-          box.append(Object.assign(document.createElement('img'), { src, alt: `${p.title}, image ${i + 1}` }));
+          const img = document.createElement('img');
+          img.src = src; img.alt = `${p.title}, image ${i + 1}`;
+          box.append(img);
         }
       } else {
         box.textContent = 'Photo';
       }
       document.getElementById('media').append(box);
-    });
-
-    // ---- PDF windows (shown right on the page) ----
-    docs.forEach(src => {
-      const label = decodeURIComponent(src.split('/').pop().replace(/\.pdf$/i, ''));
-      const fig = document.createElement('figure');
-      fig.className = 'doc';
-      const frame = Object.assign(document.createElement('iframe'), { src: src + '#view=FitH', title: label });
-      const cap = document.createElement('figcaption');
-      const name = Object.assign(document.createElement('span'), { textContent: label });
-      const dl = Object.assign(document.createElement('a'), { href: src, textContent: 'Download PDF' });
-      dl.setAttribute('download', '');
-      cap.append(name, dl);
-      fig.append(frame, cap);
-      document.getElementById('docs').append(fig);
     });
   </script>
   <script src="menu.js"></script>

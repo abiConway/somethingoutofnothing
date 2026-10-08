@@ -11,9 +11,9 @@ const blurb = "Blurb about the project goes here. Describe the process, the peop
         "static/basketball_graphics/IMG_1785.jpg", "static/basketball_graphics/IMG_1786.jpg", 
         "static/basketball_graphics/IMG_1787.jpg", "static/basketball_graphics/IMG_1788.jpg", 
         "static/basketball_graphics/IMG_1789.jpg", "static/basketball_graphics/IMG_1790.jpg", 
-        "static/basketball_graphics/IMG_1791.jpg", "static/basketball_graphics/IMG_1792.jpg", 
-        "static/basketball_graphics/IMG_1791 2.jpg", "static/basketball_graphics/IMG_1794.jpg", 
-        "static/basketball_graphics/IMG_1795.jpg", "static/basketball_graphics/IMG_1796.jpg"
+        "static/basketball_graphics/IMG_1791.jpg", "static/basketball_graphics/IMG_1792.jpg",
+        "static/basketball_graphics/IMG_1794.jpg", "static/basketball_graphics/IMG_1795.jpg", 
+        "static/basketball_graphics/IMG_1796.jpg"
       ] },
       2: { title: "CEC Project", blurb: blurb.repeat(14), media: [
         "static\CEC_project\Brand CommunicationCEC.pdf", 
