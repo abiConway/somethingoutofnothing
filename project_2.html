@@ -10,6 +10,17 @@
     .wrap { position: relative; }
     .blurb { margin: 0; overflow-wrap: anywhere; }
     .media .ph { position: absolute; width: var(--w, 16%); aspect-ratio: 1; left: var(--x); top: var(--y); }
+    button.ph { border: 0; font: inherit; letter-spacing: inherit; cursor: pointer; transition: scale .15s ease; }
+    button.ph:hover { scale: 1.05; }
+    dialog { width: min(60rem, 94vw); height: 88vh; padding: 0; border: 1px solid var(--cream);
+             background: var(--blue); color: var(--cream); }
+    dialog::backdrop { background: rgba(0, 0, 0, .6); }
+    .dlg { display: flex; flex-direction: column; height: 100%; }
+    .dlg-bar { display: flex; gap: 1.5rem; align-items: center; padding: .75rem 1rem; }
+    .dlg-bar span { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dlg-bar button { font: inherit; letter-spacing: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+    .dlg-bar button:hover { color: var(--chartreuse); }
+    .dlg iframe { flex: 1; width: 100%; border: 0; background: #fff; }
     @media (max-width: 700px) {
       .media { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.5rem; }
       .media .ph { position: static; width: 100%; }
@@ -46,7 +57,7 @@
   <script>
     /* Edit your 7 projects here.
        media: one entry per photo/video. Use a file path ("images/p1-1.jpg" or "video/p1.mp4"),
-       or null for a white placeholder box. Any number of entries works (1, 2, 4, 6...). */
+       a PDF ("static/brief.pdf", opens in a pop-up viewer), or null for a white placeholder box. Any number of entries works (1, 2, 4, 6...). */
     const blurb = "Blurb about the project goes here. Describe the process, the people, and the ideas behind it. ";
     const projects = {
       1: { title: "Basketball Graphics", blurb: blurb.repeat(14), media: ["static/basketball_graphics/IMG_1783.jpg", "static/basketball_graphics/IMG_1784.jpg", "static/basketball_graphics/IMG_1785.jpg", "static/basketball_graphics/IMG_1786.jpg", "static/basketball_graphics/IMG_1787.jpg", "static/basketball_graphics/IMG_1788.jpg", "static/basketball_graphics/IMG_1789.jpg", "static/basketball_graphics/IMG_1790.jpg", "static/basketball_graphics/IMG_1791.jpg", "static/basketball_graphics/IMG_1792.jpg", "static/basketball_graphics/IMG_1793.jpg", "static/basketball_graphics/IMG_1794.jpg", "static/basketball_graphics/IMG_1795.jpg", "static/basketball_graphics/IMG_1796.jpg"] },
@@ -72,8 +83,23 @@
     const ys = rows === 1 ? [38] : Array.from({ length: rows }, (_, r) => 6 + r * (58 / (rows - 1)));
     const jit = [[0,0],[-1,3],[2,-2],[-2,2],[3,-3],[-3,1]];
 
+    // PDF viewer: pop-up on desktop, new tab on phones/tablets (they don't embed PDFs well)
+    const dlg = document.getElementById('pdfDialog'), frame = document.getElementById('pdfFrame');
+    function openPdf(src, label) {
+      if (matchMedia('(pointer: coarse)').matches) { window.open(src, '_blank'); return; }
+      document.getElementById('pdfName').textContent = label;
+      document.getElementById('pdfDownload').href = src;
+      frame.src = src;
+      dlg.showModal();
+    }
+    const closePdf = () => { dlg.close(); frame.src = 'about:blank'; };
+    document.getElementById('pdfClose').addEventListener('click', closePdf);
+    dlg.addEventListener('click', e => { if (e.target === dlg) closePdf(); });
+    dlg.addEventListener('cancel', () => { frame.src = 'about:blank'; });
+
     p.media.forEach((src, i) => {
-      const box = document.createElement('div');
+      const isPdf = !!src && /\.pdf$/i.test(src);
+      const box = document.createElement(isPdf ? 'button' : 'div');
       box.className = 'ph';
       const [jx, jy] = jit[i % jit.length];
       const x = n === 1 ? 32 : xs[i % cols] + jx;
@@ -81,7 +107,12 @@
       box.style.setProperty('--x', x + '%');
       box.style.setProperty('--y', y + '%');
       if (n === 1) box.style.setProperty('--w', '36%');
-      if (src) {
+      if (isPdf) {
+        const label = decodeURIComponent(src.split('/').pop().replace(/\.pdf$/i, ''));
+        box.type = 'button';
+        box.textContent = 'PDF: ' + label;
+        box.addEventListener('click', () => openPdf(src, label));
+      } else if (src) {
         box.classList.add('has-media');
         if (/\.(mp4|webm|mov)$/i.test(src)) {
           const v = document.createElement('video');
@@ -98,6 +129,17 @@
       document.getElementById('media').append(box);
     });
   </script>
+  <dialog id="pdfDialog">
+    <div class="dlg">
+      <div class="dlg-bar">
+        <span id="pdfName"></span>
+        <a id="pdfDownload" download>Download</a>
+        <button type="button" id="pdfClose">Close ✕</button>
+      </div>
+      <iframe id="pdfFrame" title="PDF viewer"></iframe>
+    </div>
+  </dialog>
+
   <script src="menu.js"></script>
 </body>
 </html>
