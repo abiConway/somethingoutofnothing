@@ -21,12 +21,11 @@ const blurb = "Blurb about the project goes here. Blurb, blurb, blurbity, blurb,
       ] },
       4: { title: "FA", blurb: blurb.repeat(14), media: ["static/FA_project/FA Sign.png", "static/FA_project/Final Project.png"] },
       5: { title: "Principessa", blurb: blurb.repeat(14), media: [
-        "static/principessa_project/Bag.HEIC", "static/principessa_project/Bag 2.jpg", 
-        "static/principessa_project/Bag 3.jpg", "static/principessa_project/Bag 4.HEIC", 
-        "static/principessa_project/Bag 5.HEIC", "static/principessa_project/Bag 6.HEIC", 
-        "static/principessa_project/Bag 7.HEIC", "static/principessa_project/Bag 8.HEIC", 
-        "static/principessa_project/Bag 9.HEIC", "static/principessa_project/Bag 10.HEIC",
-        "static/principessa_project/Bag doodle 1.pdf", "static/principessa_project/Bag doodle 2.pdf"
+        "static/principessa_project/Bag.png", "static/principessa_project/Bag 3.png", 
+        "static/principessa_project/Bag 4.png","static/principessa_project/Bag 7.png", 
+        "static/principessa_project/Bag 8.png", "static/principessa_project/Bag 9.png", 
+        "static/principessa_project/Bag 10.png", "static/principessa_project/Bag doodle 1.pdf", 
+        "static/principessa_project/Bag doodle 2.pdf"
       ] },
       6: { title: "Tenet", blurb: blurb.repeat(14), media: [
         "static/tenet_project/All colors.MOV", "static/tenet_project/Flame.MOV", 
