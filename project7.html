@@ -6,22 +6,22 @@
   <title>Project</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Two columns: text on the left, photos start at the middle of the page */
+    .ptitle { font-size: .85rem; font-weight: 400; margin: 0 0 2rem; }
     .wrap { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; align-items: start; }
     .blurb { grid-column: 1; grid-row: 1; margin: 0; overflow-wrap: anywhere; }
-    .blurb p { margin: 0 0 1.5rem; }
     .media { grid-column: 2; grid-row: 1; display: grid; grid-template-columns: repeat(3, 1fr);
-             gap: 2rem 1rem; justify-items: center; align-content: start; }
+            gap: 2rem 1rem; justify-items: center; align-content: start; }
     .media .ph { position: relative; width: 100%; aspect-ratio: 1; }
     .media .ph.video { width: 90%; aspect-ratio: 16 / 9; }
     .media .ph.pdf { aspect-ratio: 8.5 / 11; }
-
-    .ph.zoom { cursor: zoom-in; transition: scale .15s ease; }
     .ph.zoom:hover { scale: 1.05; }
+
     button.ph { border: 0; font: inherit; letter-spacing: inherit; cursor: pointer; transition: scale .15s ease; }
     button.ph:hover { scale: 1.05; }
-    .ph canvas { width: 100%; height: 100%; display: block; object-fit: cover; object-position: top; }
+    .ph canvas { width: 100%; height: 100%; display: block; object-fit: cover; object-position: top;}
     .pdf-tag { position: absolute; left: 0; bottom: 0; background: var(--cream); color: #111; padding: .15rem .5rem; font-size: .7rem; }
+
+
 
     /* Lightbox */
     #lightbox { width: 100vw; max-width: 100vw; height: 100vh; max-height: 100vh; padding: 0; border: 0; color: var(--cream); background: rgba(4, 51, 255, .97); }
@@ -36,7 +36,6 @@
     #lbClose { position: absolute; top: .5rem; right: .75rem; font-size: .85rem; }
     #lbCount { position: absolute; bottom: .75rem; left: 0; right: 0; text-align: center; }
 
-    /* Phones: text on top, photos underneath in 2 columns */
     @media (max-width: 700px) {
       .wrap { grid-template-columns: 1fr; }
       .blurb, .media { grid-column: 1; grid-row: auto; }
@@ -86,11 +85,8 @@
     const id = new URLSearchParams(location.search).get('p');
     const p = projects[id] || projects[1];
     document.title = p.title;
-
-    // Text: "Project: Title", then the description, then "Goal: ..."
     const blurbEl = document.getElementById('blurb');
     [['Project', p.title], ['Description', p.description], ['Goal', p.goal]].forEach(([label, text]) => {
-      if (!text) return;
       const para = document.createElement('p');
       para.textContent = `${text}`;
       blurbEl.append(para);
@@ -101,6 +97,17 @@
     const enc = s => { try { return encodeURI(decodeURI(s)); } catch { return s; } }; // handles spaces in filenames
     const items = p.media;                          // photos / videos / PDFs / placeholders
     const gallery = p.media.filter(Boolean);        // what the lightbox flips through (photos, videos, PDFs)
+
+    // ---- Overlay layout for photos ----
+    const n = items.length;
+    const cols = n <= 3 ? Math.max(n, 1) : (n === 4 ? 2 : 3);
+    const rows = Math.ceil(n / cols);
+    const xs = { 1: [32], 2: [33, 63], 3: [28, 56, 84] }[cols];
+    const span = rows <= 2 ? 58 : 72;
+    const ys = rows === 1 ? [38] : Array.from({ length: rows }, (_, r) => 6 + r * (span / (rows - 1)));
+    const jit = [[0,0],[-1,3],[2,-2],[-2,2],[3,-3],[-3,1]];
+    // more than 2 rows: extra height so the photos don't pile up
+    if (rows > 2) document.querySelector('.wrap').style.setProperty('--mh', ((rows - 1) * 14 + 10) + 'rem');
 
     // ---- Lightbox ----
     const lb = document.getElementById('lightbox'), lbStage = document.getElementById('lbStage');
@@ -177,6 +184,10 @@
       const pdf = isPdf(src);
       const box = document.createElement(pdf ? 'button' : 'div');
       box.className = 'ph';
+      const [jx, jy] = jit[i % jit.length];
+      box.style.setProperty('--x', (n === 1 ? 32 : xs[i % cols] + jx) + '%');
+      box.style.setProperty('--y', (n === 1 ? 12 : ys[Math.floor(i / cols)] + jy) + '%');
+      if (n === 1) box.style.setProperty('--w', '36%');
       if (pdf) {
         const label = decodeURIComponent(src.split('/').pop().replace(/\.pdf$/i, ''));
         box.type = 'button';
@@ -204,6 +215,7 @@
       }
       document.getElementById('media').append(box);
     });
+
   </script>
   <script src="menu.js"></script>
 </body>
