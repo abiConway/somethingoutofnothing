@@ -28,8 +28,8 @@ const blurb = "Blurb about the project goes here. Blurb, blurb, blurbity, blurb,
         "static/principessa_project/Bag doodle 2.pdf"
       ] },
       6: { title: "Tenet", blurb: blurb.repeat(14), media: [
-        "static/tenet_project/All colors.mov", "static/tenet_project/Flame.mov", 
-        "static/tenet_project/Oil.mov", "static/tenet_project/Tenet 1.jpg", 
+        "static/tenet_project/all-colors.MOV", "static/tenet_project/flame-1.MOV", 
+        "static/tenet_project/oil-1.MOV", "static/tenet_project/Tenet 1.jpg", 
         "static/tenet_project/Tenet 1.MOV", "static/tenet_project/Tenet 2.jpg", 
         "static/tenet_project/Tenet 2.MOV", "static/tenet_project/Tenet 3.jpg", 
         "static/tenet_project/Tenet 3.MOV"] },
