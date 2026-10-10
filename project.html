@@ -9,11 +9,11 @@
     .ptitle { font-size: .85rem; font-weight: 400; margin: 0 0 2rem; }
     .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); }
     .blurb { grid-area: 1 / 1; align-self: start; margin: 0; overflow-wrap: anywhere; }
-    .media { grid-area: .5 / 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem 1rem;
+    .media { grid-area: 1 / .5; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem 1rem;
             justify-items: center; align-content: start; padding: 1.5rem 0; pointer-events: none; }
     .media .ph { position: relative; width: 60%; aspect-ratio: 1; pointer-events: auto; }.ph.zoom { cursor: zoom-in; transition: scale .15s ease; }
     .media .ph.video { width: 90%; aspect-ratio: 16 / 9; }
-    .media .ph.pdf   { width: 50%; aspect-ratio: 8.5 / 11; }
+    .media .ph.pdf { aspect-ratio: 8.5 / 11; }
     .ph.zoom:hover { scale: 1.05; }
 
     button.ph { border: 0; font: inherit; letter-spacing: inherit; cursor: pointer; transition: scale .15s ease; }

@@ -1,7 +1,13 @@
-const blurb = "Blurb about the project goes here. Blurb, blurb, blurbity, blurb, blurb. ";
+const josie_blurb = "A design centered brand campaign within hospitality.Goal To establish a distinct brand presence and introduce a newly launched brand to a hyper-competitve market. ";
+const fa_blurb = "A creative advertisement project centered around collaboration and inclusion. Goal To create a visual advertisement within aspecific brand community centered around inclussion. "
+const merrell_blurb = "A reworking of an existing product. Goal To create a creative brief of an existing product reworked. "
+const tenent = "Design as a way of life. Goal: Bring people together through design by a creative design event."
+const brand_book = "Goal: To create a brand book outlining the visual communication of the Career Education Center at the University of Portland to increase student engagement."
+const artwork_blurb = "Goal: To explore visual storytelling through artistic expression, using composition, color, and form to communicate ideas, evoke emotion, and develop a distinct creative perspective."
+const athletic_graphics = "Goal: To create dynamic visual campaigns that strengthen athletic brand identity, engage fans, and capture the energy, culture, and competitive spirit of collegiate athletics."
 
     const projects = {
-      1: { title: "Athletic Graphics", blurb: blurb.repeat(14), media: [
+      1: { title: "Project: Athletic Graphics", blurb: blurb.repeat(14), media: [
         "static/basketball_graphics/IMG_1783.jpg", "static/basketball_graphics/IMG_1784.jpg", 
         "static/basketball_graphics/IMG_1785.jpg", "static/basketball_graphics/IMG_1786.jpg", 
         "static/basketball_graphics/IMG_1787.jpg", "static/basketball_graphics/IMG_1788.jpg", 
@@ -10,31 +16,30 @@ const blurb = "Blurb about the project goes here. Blurb, blurb, blurbity, blurb,
         "static/basketball_graphics/IMG_1794.jpg", "static/basketball_graphics/IMG_1795.jpg", 
         "static/basketball_graphics/IMG_1796.jpg"
       ] },
-      2: { title: "CEC Project", blurb: blurb.repeat(14), media: [
+
+      2: { title: "Project: Brand Book", blurb: blurb.repeat(14), media: [
         "static/CEC_project/Brand CommunicationCEC.pdf", 
-        "static/CEC_project/Drop In Hours_ _A Frame_.pdf"] },
-      3: { title: "Artwork", blurb: blurb.repeat(14), media: ["static/digital_artwork/Cranberry Union.jpg", "static/digital_artwork/Illustration work .pdf",
+        "static/CEC_project/Drop In Hours_ _A Frame_.pdf"
+      ] },
+
+      3: { title: "Project: Artwork", blurb: blurb.repeat(14), media: ["static/digital_artwork/Cranberry Union.jpg", "static/digital_artwork/Illustration work .pdf",
         "static/digital_artwork/image.png", "static/digital_artwork/image-2.png", 
         "static/digital_artwork/image-3.png", "static/digital_artwork/image-4.png", 
         "static/digital_artwork/scanned.pdf", "static/digital_artwork/screenshot-1.png", 
         "static/digital_artwork/screenshot-2.png"
       ] },
-      4: { title: "FA", blurb: blurb.repeat(14), media: ["static/FA_project/FA Sign.png", "static/FA_project/final-project.mp4"] },
+      4: { title: "Project: Fucking Awesome", blurb: blurb.repeat(14), media: ["static/FA_project/FA Sign.png", "static/FA_project/final-project.mp4"] },
 
-      5: { title: "Principessa", blurb: blurb.repeat(14), media: [
-        "static/principessa_project/Bag.png", "static/principessa_project/Bag 3.png", 
-        "static/principessa_project/Bag 4.png","static/principessa_project/Bag 7.png", 
-        "static/principessa_project/Bag 8.png", "static/principessa_project/Bag 9.png", 
-        "static/principessa_project/Bag 10.png", "static/principessa_project/Bag doodle 1.pdf", 
-        "static/principessa_project/Bag doodle 2.pdf"
+      5: { title: "Project: Josie's Coffee", blurb: blurb.repeat(14), media: [
+        "static\Josies Coffee Branding.pdf"
       ] },
 
-      6: { title: "Tenet", blurb: blurb.repeat(14), media: [
+      6: { title: "Project: Tenet", blurb: blurb.repeat(14), media: [
         "static/tenet_project/all-colors.MOV", "static/tenet_project/flame-1.MOV", 
         "static/tenet_project/oil-1.MOV", "static/tenet_project/Tenet 1.jpg", 
         "static/tenet_project/Tenet 1.MOV", "static/tenet_project/Tenet 2.jpg", 
         "static/tenet_project/Tenet 2.MOV", "static/tenet_project/Tenet 3.jpg", 
         "static/tenet_project/Tenet 3.MOV"] },
-        
-      7: { title: "Merrell", blurb: blurb.repeat(14), media: ["static/Merrell Project Video.mp4"] }
+
+      7: { title: "Project: Merrell Nova 2X", blurb: blurb.repeat(14), media: ["static/Merrell Project Video.mp4"] }
     };
