@@ -10,7 +10,7 @@
     .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); }
     .blurb { grid-area: 1 / 1; align-self: start; margin: 0; overflow-wrap: anywhere; }
     .blurb p { margin: 0 0 1.5rem; }
-    .media { grid-area: 1 / .5; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem 1rem;
+    .media { grid-area: 1 / 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem 1rem;
             justify-items: center; align-content: start; padding: 1.5rem 0; pointer-events: none; }
     .media .ph { position: relative; width: 60%; aspect-ratio: 1; pointer-events: auto; }.ph.zoom { cursor: zoom-in; transition: scale .15s ease; }
     .media .ph.video { width: 90%; aspect-ratio: 16 / 9; }
@@ -87,9 +87,9 @@
     const p = projects[id] || projects[1];
     document.title = p.title;
     const blurbEl = document.getElementById('blurb');
-    [['Project', p.title], ['', p.description], ['Goal', p.goal]].forEach(([label, text]) => {
+    [[p.title], [p.description], [p.goal]].forEach(([label, text]) => {
       const para = document.createElement('p');
-      para.textContent = `${label}: ${text}`;
+      para.textContent = `${text}`;
       blurbEl.append(para);
     });
 
