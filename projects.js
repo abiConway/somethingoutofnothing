@@ -19,7 +19,7 @@ const blurb = "Blurb about the project goes here. Blurb, blurb, blurbity, blurb,
         "static/digital_artwork/scanned.pdf", "static/digital_artwork/screenshot-1.png", 
         "static/digital_artwork/screenshot-2.png"
       ] },
-      4: { title: "FA", blurb: blurb.repeat(14), media: ["static/FA_project/FA Sign.png", "static/FA_project/Final Project.png"] },
+      4: { title: "FA", blurb: blurb.repeat(14), media: ["static/FA_project/FA Sign.png", "static/FA_project/final-project.mp4"] },
       5: { title: "Principessa", blurb: blurb.repeat(14), media: [
         "static/principessa_project/Bag.png", "static/principessa_project/Bag 3.png", 
         "static/principessa_project/Bag 4.png","static/principessa_project/Bag 7.png", 
