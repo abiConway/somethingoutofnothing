@@ -9,6 +9,7 @@
     .ptitle { font-size: .85rem; font-weight: 400; margin: 0 0 2rem; }
     .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); }
     .blurb { grid-area: 1 / 1; align-self: start; margin: 0; overflow-wrap: anywhere; }
+    .blurb p { margin: 0 0 1.5rem; }
     .media { grid-area: 1 / .5; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem 1rem;
             justify-items: center; align-content: start; padding: 1.5rem 0; pointer-events: none; }
     .media .ph { position: relative; width: 60%; aspect-ratio: 1; pointer-events: auto; }.ph.zoom { cursor: zoom-in; transition: scale .15s ease; }
@@ -57,9 +58,8 @@
   </header>
 
   <main class="page">
-    <h1 class="ptitle" id="title"></h1>
     <div class="wrap">
-      <p class="blurb" id="blurb"></p>
+      <div class="blurb" id="blurb"></div>
       <div class="media" id="media"></div>
     </div>
   </main>
@@ -86,8 +86,12 @@
     const id = new URLSearchParams(location.search).get('p');
     const p = projects[id] || projects[1];
     document.title = p.title;
-    document.getElementById('title').textContent = `“${p.title}”`;
-    document.getElementById('blurb').textContent = p.blurb;
+    const blurbEl = document.getElementById('blurb');
+    [['Project', p.title], ['', p.description], ['Goal', p.goal]].forEach(([label, text]) => {
+      const para = document.createElement('p');
+      para.textContent = `${label}: ${text}`;
+      blurbEl.append(para);
+    });
 
     const isPdf = m => !!m && /\.pdf$/i.test(m);
     const isVideo = m => /\.(mp4|webm|mov)$/i.test(m);
