@@ -87,7 +87,7 @@
     const p = projects[id] || projects[1];
     document.title = p.title;
     const blurbEl = document.getElementById('blurb');
-    [[p.title], [p.description], [p.goal]].forEach(([label, text]) => {
+    [['Project', p.title], ['Description', p.description], ['Goal', p.goal]].forEach(([label, text]) => {
       const para = document.createElement('p');
       para.textContent = `${text}`;
       blurbEl.append(para);
