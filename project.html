@@ -9,14 +9,16 @@
     .ptitle { font-size: .85rem; font-weight: 400; margin: 0 0 2rem; }
     .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); }
     .blurb { grid-area: 1 / 1; align-self: start; margin: 0; overflow-wrap: anywhere; }
-    .media { grid-area: 1 / 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem 1rem;
+    .media { grid-area: .5 / 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem 1rem;
             justify-items: center; align-content: start; padding: 1.5rem 0; pointer-events: none; }
     .media .ph { position: relative; width: 60%; aspect-ratio: 1; pointer-events: auto; }.ph.zoom { cursor: zoom-in; transition: scale .15s ease; }
+    .media .ph.video { width: 90%; aspect-ratio: 16 / 9; }
+    .media .ph.pdf   { width: 50%; aspect-ratio: 8.5 / 11; }
     .ph.zoom:hover { scale: 1.05; }
 
     button.ph { border: 0; font: inherit; letter-spacing: inherit; cursor: pointer; transition: scale .15s ease; }
     button.ph:hover { scale: 1.05; }
-    .ph canvas { width: 100%; height: 100%; display: block; }
+    .ph canvas { width: 100%; height: 100%; display: block; object-fit: cover; object-position: top;}
     .pdf-tag { position: absolute; left: 0; bottom: 0; background: var(--cream); color: #111; padding: .15rem .5rem; font-size: .7rem; }
 
 
@@ -158,13 +160,13 @@
       try {
         const lib = await loadPdfJs();
         const page = await (await lib.getDocument(enc(src)).promise).getPage(1);
-        const N = 400, base = page.getViewport({ scale: 1 });
-        const view = page.getViewport({ scale: Math.max(N / base.width, N / base.height) });
+        const base = page.getViewport({ scale: 1 });
+        const view = page.getViewport({ scale: 400 / base.width });
         const canvas = document.createElement('canvas');
-        canvas.width = N; canvas.height = N;
+        canvas.width = view.width; canvas.height = view.height;
         const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, N, N);
-        await page.render({ canvasContext: ctx, viewport: view, transform: [1, 0, 0, 1, (N - view.width) / 2, 0] }).promise;
+        ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+        await page.render({ canvasContext: ctx, viewport: view }).promise;
         const tag = Object.assign(document.createElement('span'), { className: 'pdf-tag', textContent: 'PDF' });
         box.textContent = '';
         box.classList.add('has-media');
@@ -186,6 +188,7 @@
       if (pdf) {
         const label = decodeURIComponent(src.split('/').pop().replace(/\.pdf$/i, ''));
         box.type = 'button';
+        box.classList.add('pdf');
         box.textContent = 'PDF: ' + label;
         box.setAttribute('aria-label', 'Open PDF: ' + label);
         box.addEventListener('click', () => openLb(gallery.indexOf(src)));
@@ -199,6 +202,7 @@
         box.addEventListener('click', () => openLb(idx));
         box.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLb(idx); } });
         if (isVideo(src)) {
+          box.classList.add('video');
           box.append(Object.assign(document.createElement('video'), { src: enc(src), autoplay: true, muted: true, loop: true, playsInline: true }));
         } else {
           box.append(Object.assign(document.createElement('img'), { src: enc(src), alt: `${p.title}, image ${i + 1}` }));
