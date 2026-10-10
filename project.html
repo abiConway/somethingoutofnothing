@@ -7,10 +7,11 @@
   <link rel="stylesheet" href="style.css">
   <style>
     .ptitle { font-size: .85rem; font-weight: 400; margin: 0 0 2rem; }
-    .wrap { position: relative; min-height: var(--mh, 0); }
-    .blurb { margin: 0; overflow-wrap: anywhere; }
-    .media .ph { position: absolute; width: var(--w, 16%); aspect-ratio: 1; left: var(--x); top: var(--y); }
-    .ph.zoom { cursor: zoom-in; transition: scale .15s ease; }
+    .wrap { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); }
+    .blurb { grid-area: 1 / 1; align-self: start; margin: 0; overflow-wrap: anywhere; }
+    .media { grid-area: 1 / 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem 1rem;
+            justify-items: center; align-content: start; padding: 1.5rem 0; pointer-events: none; }
+    .media .ph { position: relative; width: 60%; aspect-ratio: 1; pointer-events: auto; }.ph.zoom { cursor: zoom-in; transition: scale .15s ease; }
     .ph.zoom:hover { scale: 1.05; }
 
     button.ph { border: 0; font: inherit; letter-spacing: inherit; cursor: pointer; transition: scale .15s ease; }
