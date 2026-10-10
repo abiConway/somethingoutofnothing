@@ -40,7 +40,7 @@ const projects = {
     description: "A design centered brand campaign within hospitality.", 
     goal: "Goal: To establish a distinct brand presence and introduce a newly launched brand to a hyper-competitve market.",
     media: [
-    "static\Josies Coffee Branding.pdf"
+    "static\josies-coffee.pdf"
   ] },
 
   6: { title: "Project: Tenet", 
