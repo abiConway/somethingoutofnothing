@@ -6,13 +6,13 @@
   <title>Project</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Text runs the full width; the photos sit on top of it, starting at the middle of the page */
+    /* Two columns: text on the left, photos start at the middle of the page */
     .wrap { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 2rem; align-items: start; }
-    .blurb { grid-column: 1 / -1; grid-row: 1; margin: 0; overflow-wrap: anywhere; }
+    .blurb { grid-column: 1; grid-row: 1; margin: 0; overflow-wrap: anywhere; }
     .blurb p { margin: 0 0 1.5rem; }
-    .media { grid-column: 2; grid-row: 1; position: relative; z-index: 1; pointer-events: none; display: grid; grid-template-columns: repeat(3, 1fr);
+    .media { grid-column: 2; grid-row: 1; display: grid; grid-template-columns: repeat(3, 1fr);
              gap: 2rem 1rem; justify-items: center; align-content: start; }
-    .media .ph { position: relative; width: 100%; aspect-ratio: 1; pointer-events: auto; }
+    .media .ph { position: relative; width: 100%; aspect-ratio: 1; }
     .media .ph.video { width: 90%; aspect-ratio: 16 / 9; }
     .media .ph.pdf { aspect-ratio: 8.5 / 11; }
 
